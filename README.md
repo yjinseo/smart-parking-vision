@@ -52,14 +52,21 @@ OpenCV + YOLO + Flask로 Edge 환경에서도 동작
 추가 센서 없이 저비용·고확장성
 
 ## 📸 Demo
-차량 인식 결과
 
-![YOLO ROI Demo](result/result.mp4)
+### 🚗 차량 인식 결과 (YOLO + ROI)
+<img src="result/out_vis.jpg" width="800">
 
-실시간 대시보드
-![Dashboard]("result/스크린샷 2025-11-23 04-32-21.png")
-![Dashboard]("result/스크린샷 2025-11-23 04-32-54.png")
-![Dashboard]("result/스크린샷 2025-11-23 04-33-28.png")
+---
+
+### 🖥 실시간 웹 대시보드 화면
+
+<table>
+<tr>
+<td><img src="result/스크린샷 2025-11-23 04-32-21.png" width="350"></td>
+<td><img src="result/스크린샷 2025-11-23 04-32-54.png" width="350"></td>
+<td><img src="result/스크린샷 2025-11-23 04-33-28.png" width="350"></td>
+</tr>
+</table>
 
 
 ## 📂 Folder Structure
