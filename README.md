@@ -70,7 +70,7 @@ OpenCV + YOLO + Flask로 Edge 환경에서도 동작
 
 
 ## 📂 Folder Structure
-'''bash
+'''
 EE_Project/
 │── occupancy_video.py        # YOLO + ROI 실시간 점유 분석
 │── web/
