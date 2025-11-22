@@ -2,95 +2,124 @@
 
 YOLO 기반 실시간 주차 공간 분석 & 추천 시스템
 
-📌 프로젝트 개요
+🚀 Overview
 
-주차장의 차량 점유 상태를 실시간 분석하고,
-Zone(A/B/C)별 빈자리 비교를 통해 가장 추천하는 주차장을 자동 선정하는 시스템입니다.
+복수 주차장 Zone A/B/C의 주차칸 점유 상태를 실시간 분석하고,
+빈자리 수를 기반으로 최적의 Zone을 추천하는 Edge AI 시스템입니다.
 
-✨ 핵심 특징
-1. 센서 없이, 카메라 하나로 구현하는 초저비용 시스템
+Jetson Nano에서도 구동 가능하며, 센서 기반 시스템 대비 압도적으로 저비용입니다.
 
-초음파·RFID 센서 기반 시스템의 설치 비용 / 유지보수 / 배선 문제 해결
+✨ Key Features
+🔍 1. 센서 없이 카메라만으로 주차칸 인식
 
-기존 CCTV 영상만으로 주차 공간 인식 가능 → 비용 90% 절감
+기존 초음파·RFID 기반 주차 시스템의 문제인
+설치 비용, 배선, 유지보수를 해결한 영상 기반 솔루션입니다.
 
-2. YOLO 기반 차량 탐지 + ROI 기반 주차칸 점유 판단
+🚗 2. YOLO + ROI 기반 점유 판단
 
-사용자 정의 ROI(주차칸)와 YOLO 탐지 박스 IoU 교차 분석
+YOLO 차량 탐지
 
-각 칸별 Occupied / Free 상태 실시간 반영
+주차칸 ROI 교차 분석
 
-장애인 구역 별도 관리 및 표시
+A/B/C 전체 칸 별 Occupied / Free 실시간 업데이트
 
-3. 3개 Zone(A/B/C) 비교 후 ‘최적의 Zone 추천’
+♿ 3. 장애인구역 별도 인식
 
-Zone별 Free/Total을 기반으로 점수 계산
+일반 칸과 별도 관리되어
+장애인 주차 공간 점유도 정확하게 표시합니다.
 
-가장 주차 가능성이 높은 Zone을 자동 추천
+🧠 4. 실시간 Zone 추천 알고리즘
 
-프론트엔드 메인 화면에 추천 결과 표시
+Zone별 Free/Total 계산
 
-4. 프론트엔드 – 시각화 중심의 UI
+Scoring 기반 추천
 
-메인 UI: Zone 상태, Free / Total, 장애인칸 표시
+메인 화면에 가장 추천되는 Zone 표시
 
-Zone 상세 UI:
+📊 5. 시각화 중심의 웹 UI
+
+Zone 상태 한눈에 확인
+
+각 Zone 클릭 시
 
 16/6/14칸 실시간 상태
 
-장애인 구역 강조 표시
+장애인칸 강조 표시
 
-혼잡도 예측 그래프(예상 점유 / 과거 평균 비교)
+혼잡도 예측 그래프(Chart.js)
 
-5초 자동 새로고침으로 실시간 데이터 반영
+5초 자동 새로고침 → 실시간 반영
 
-5. Jetson Nano 실시간 시연 가능
+🟦 6. Jetson Nano 실시간 시연 지원
 
-occupancy_video.py로 USB 카메라 받아 YOLO 분석
+USB 카메라 + YOLO + Flask →
+임베디드 환경에서도 매끄럽게 동작
 
-Flask 웹 서버와 status.json 실시간 동기화
+🖼️ Demo
+📌 YOLO + ROI 차량 점유 분석
 
-Jetson Nano에서도 경량 YOLO 모델로 충분히 동작
+![demo1](result/out_vis.jpg)
 
-📷 시연 결과 (이미지 삽입)
-1. YOLO 차량 탐지 & 주차 상태 분석
-<img src="/mnt/data/out_vis.jpg" width="650">
-2. 실시간 웹 대시보드
-<img src="/mnt/data/스크린샷 2025-11-23 04-33-14.png" width="650">
-3. Zone 상세 화면 예시
-<img src="/mnt/data/스크린샷 2025-11-23 04-33-28.png" width="650">
+📌 실시간 웹 대시보드
+![dashboard](result/dashboard_example.png)
+
 🎬 시연 영상
 
-시스템 전체 파이프라인이 동작하는 영상입니다:
+📹 GitHub 용량 제한으로 영상은 링크 업로드 예정 
 
-주차칸 실시간 분석 영상
-
-/mnt/data/output_occupancy.mp4
-
-최종 결과 영상
-
-/mnt/data/result.mp4
-
-📂 프로젝트 구조
+📂 Project Structure
 EE_Project/
-│── occupancy_video.py      # YOLO + ROI 기반 차량 인식 및 상태 저장
-│── web/                    # Flask 웹 서비스
-│   ├── Flask_app.py
-│   ├── templates/
-│   └── static/
-│── rois/                   # ROI 설정 파일 (A/B/C)
-│── refs/                   # ORB 매칭용 기준 이미지
-│── result/                 # 시연 영상 & 스크린샷
-│── dataset_car/            # 차량 YOLO 학습 데이터
+│── occupancy_video.py        # YOLO + ROI 기반 점유 분석
+│── web/
+│   ├── Flask_app.py          # Flask 웹 서버
+│   ├── static/               # CSS, Icons
+│   ├── templates/            # index.html, zone.html
+│── rois/                     # ROI polygon 좌표 (A/B/C)
+│── refs/                     # ORB alignment reference images
+│── result/                   # 시연 영상 & 스크린샷
+│── dataset_car/              # 차량 YOLO 학습 데이터
 
-🧠 기술 스택
+🧰 Tech Stack
 
 YOLOv8
 
-OpenCV / Numpy
+OpenCV
 
-Flask 웹 서비스
+NumPy
+
+Flask
+
+Chart.js
 
 Jetson Nano
 
-Chart.js (UI 그래프 시각화)
+🎯 Presentation Bullet Points
+
+“초저비용 AI 기반 주차 모니터링”
+
+“기존 CCTV 활용, 센서 불필요”
+
+“실시간 주차장 추천 기능”
+
+“장애인 주차 공간 관리 강화”
+
+“Edge-AI Jetson Nano 실시간 처리 가능”
+
+“자동 라벨링 포함 YOLO 학습 파이프라인 구축”
+
+📎 How to Run
+1) Occupancy Detection (YOLO + ROI)
+python3 occupancy_video.py \
+  --cam /dev/video2 \
+  --weights ./runs/detect/car_mix_aug_colab_ft/weights/best.pt \
+  --rois ./rois/roi_A.yaml ./rois/roi_B.yaml ./rois/roi_C.yaml \
+  --width 1280 --height 720
+
+2) Run Web Dashboard
+cd web
+python3 Flask_app.py
+
+
+웹 접속:
+
+http://<YOUR-IP>:5000
