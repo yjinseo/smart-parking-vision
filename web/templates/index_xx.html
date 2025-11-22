@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>주차장 현황</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* 장애인칸 구분: 점선 파란 테두리 */
+    .slot-disabled { outline: 2px dashed #0d6efd; outline-offset: 2px; }
+    /* 카드 그림자 */
+    .card-shadow { box-shadow: 0 6px 18px rgba(0,0,0,0.08); }
+    /* 모달 배경 */
+    .modal-backdrop { background: rgba(0,0,0,0.5); }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-900">
+
+  <!-- 헤더 -->
+  <header class="max-w-6xl mx-auto px-4 pt-6 pb-2">
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <h1 class="text-2xl font-semibold">🚗 도심 주차 공간 추천 시스템</h1>
+      <div class="flex items-center gap-3">
+        <div id="bestZoneBadge"></div><!-- 추천 Zone 뱃지 -->
+        <div class="text-sm text-gray-500">
+          갱신 시간: <span id="lastUpdated">-</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- 존 카드 영역 -->
+  <main class="max-w-6xl mx-auto px-4 pb-16">
+    <div id="zones" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+  </main>
+
+  <!-- 모달 -->
+  <div id="zoneModal" class="fixed inset-0 hidden items-center justify-center z-50">
+    <div class="absolute inset-0 modal-backdrop" onclick="closeModal()"></div>
+    <div class="relative bg-white rounded-xl w-[92%] max-w-3xl p-5 card-shadow">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-xl font-semibold" id="zoneTitle">Zone 상세</h2>
+        <button class="text-gray-400 hover:text-gray-600" onclick="closeModal()">✕</button>
+      </div>
+      <div id="zoneSummary" class="text-sm text-gray-600 mb-3"></div>
+
+      <!-- 반응형 슬롯 그리드 -->
+      <div id="slotGrid" class="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-6"></div>
+
+      <!-- 범례 -->
+      <div class="mt-5 text-xs text-gray-500 flex flex-wrap gap-4">
+        <div class="flex items-center gap-2">
+          <span class="inline-block w-3 h-3 rounded" style="background:#28a745;"></span> FREE
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="inline-block w-3 h-3 rounded" style="background:#dc3545;"></span> OCCUPIED
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="inline-block w-3 h-3 rounded ring-1 ring-blue-600" style="background:#0d6efd;"></span> FREE (Disabled)
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="inline-block w-3 h-3 rounded ring-1 ring-blue-600" style="background:#dc3545;"></span> OCCUPIED (Disabled)
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="inline-flex items-center justify-center w-4 h-4 rounded-full bg-blue-600 text-white text-[10px]">♿</span> 장애인 구역
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 전역 상태(/status 응답 저장)
+    let STATUS = {};
+
+    // 색 규칙
+    // - 점유(occ, disabled_occ) : 빨강
+    // - 빈칸(free)             : 초록
+    // - 장애인 빈칸(disabled_free) : 파랑
+    function slotColor(status) {
+      if (status === "occ" || status === "disabled_occ") return "#dc3545"; // red
+      if (status === "disabled_free") return "#0d6efd";                    // blue
+      return "#28a745";                                                    // green
+    }
+
+    function labelText(st) {
+      if (st === "occ" || st === "disabled_occ") return "OCCUPIED";
+      if (st === "disabled_free") return "FREE (Disabled)";
+      return "FREE";
+    }
+
+    // 추천 점수: free 비율 + (장애인 free 비율 * 0.5)
+    function computeScore(info) {
+      const total = info.total ?? (info.slots?.length || 0);
+      const free  = info.free ?? 0;
+      const dt    = info.disabled_total ?? 0;
+      const df    = info.disabled_free ?? 0;
+      const free_ratio = total ? free / total : 0;
+      const disabled_free_ratio = dt ? df / dt : 0;
+      return free_ratio * 1.0 + disabled_free_ratio * 0.5;
+    }
+
+    function bestZone(data) {
+      let best = null;
+      for (const [z, info] of Object.entries(data)) {
+        const score = computeScore(info);
+        const free = info.free ?? 0;
+        const total = info.total ?? (info.slots?.length || 0);
+        const val = { z, score, free, total };
+        if (!best) best = val;
+        else {
+          if (score > best.score) best = val;
+          else if (score === best.score && free > best.free) best = val;
+        }
+      }
+      return best;
+    }
+
+    function renderBestBadge(data) {
+      const target = document.getElementById("bestZoneBadge");
+      if (!target) return;
+      const bz = bestZone(data);
+      if (!bz) { target.innerHTML = ""; return; }
+      target.innerHTML = `
+        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm bg-emerald-100 text-emerald-700">
+          추천 Zone: <strong>${bz.z}</strong>
+          <span class="text-xs text-emerald-600">(${bz.free}/${bz.total} Free)</span>
+        </span>`;
+    }
+
+    // 존 카드 렌더링(점유율 막대 포함)
+    function renderZones(data) {
+      const wrap = document.getElementById("zones");
+      wrap.innerHTML = "";
+
+      renderBestBadge(data);
+
+      Object.entries(data).forEach(([zone, info]) => {
+        const total = info.total ?? (info.slots?.length || 0);
+        const free  = info.free ?? 0;
+        const occ   = Math.max(0, total - free);
+        const occRatio = total ? (occ / total) : 0;
+
+        // C존 특수칸 요약 추가
+        let sub = "";
+        if (zone === "C" && (info.disabled_total ?? 0) > 0) {
+          const dt = info.disabled_total, df = info.disabled_free ?? 0;
+          sub = ` <span class="text-sm text-gray-500">(장애인구역 ${df}/${dt})</span>`;
+        }
+
+        const card = document.createElement("div");
+        card.className = "bg-white rounded-xl p-5 card-shadow hover:shadow-lg cursor-pointer transition";
+        card.onclick = () => showZone(zone);
+        card.innerHTML = `
+          <div class="flex items-center justify-between">
+            <div class="text-lg font-semibold">Zone ${zone}</div>
+            <div class="text-emerald-600 font-semibold text-lg">${free}/${total} Free</div>
+          </div>
+          <div class="mt-1">${sub}</div>
+
+          <div class="mt-3">
+            <div class="flex items-center justify-between text-xs text-gray-500 mb-1">
+              <span>점유율</span><span>${Math.round(occRatio*100)}%</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-2">
+              <div class="bg-emerald-500 h-2 rounded-full" style="width:${Math.round((1 - occRatio)*100)}%;"></div>
+            </div>
+          </div>
+        `;
+        wrap.appendChild(card);
+      });
+    }
+
+    // 모달: 슬롯 상세 표시(반응형 + 툴팁 + 장애인칸 테두리/아이콘)
+    function showZone(zone) {
+      const info = STATUS[zone] || {};
+      const slots = info.slots || [];
+      const total = info.total ?? slots.length;
+      const free  = info.free ?? 0;
+
+      let extra = "";
+      if (zone === "C" && (info.disabled_total ?? 0) > 0) {
+        const dt = info.disabled_total, df = info.disabled_free ?? 0;
+        extra = ` (장애인구역 ${df}/${dt})`;
+      }
+
+      document.getElementById("zoneTitle").textContent = `Zone ${zone} 상세`;
+      document.getElementById("zoneSummary").textContent = `Free ${free}/${total}${extra}`;
+
+      const grid = document.getElementById("slotGrid");
+      grid.innerHTML = "";
+      slots.forEach(s => {
+        const num = (s.id || "").split("_")[1] || "";
+        const st  = s.status || "free";
+        const el  = document.createElement("div");
+        el.className = "relative rounded-md text-white text-sm font-semibold flex items-center justify-center h-14";
+        el.style.background = slotColor(st);
+        el.title = `${s.id} - ${labelText(st)}`;
+
+        // 장애인칸 표시: 점선 테두리 + ♿ 배지 + 라벨
+        const isDisabled = st.startsWith("disabled");
+        if (isDisabled) {
+          el.classList.add("slot-disabled");
+          const badge = document.createElement("div");
+          badge.className = "absolute -top-2 -right-2 bg-blue-600 text-white text-[10px] px-1.5 py-0.5 rounded-full shadow";
+          badge.textContent = "♿";
+          el.appendChild(badge);
+
+          // 하단 라벨(옵션)
+          const cap = document.createElement("div");
+          cap.className = "absolute bottom-1 text-[10px] font-normal opacity-90";
+          cap.textContent = "Disabled";
+          el.appendChild(cap);
+        }
+
+        el.textContent = num;
+        grid.appendChild(el);
+      });
+
+      openModal();
+    }
+
+    // 모달 열고 닫기
+    function openModal() {
+      const m = document.getElementById("zoneModal");
+      m.classList.remove("hidden");
+      m.classList.add("flex");
+    }
+    function closeModal() {
+      const m = document.getElementById("zoneModal");
+      m.classList.add("hidden");
+      m.classList.remove("flex");
+    }
+
+    // /status 주기 갱신
+    async function fetchStatus() {
+      try {
+        const res = await fetch("/status", { cache: "no-store" });
+        const data = await res.json();
+        STATUS = data || {};
+        renderZones(STATUS);
+        document.getElementById("lastUpdated").textContent = new Date().toLocaleString();
+      } catch (e) {
+        console.error("status fetch error:", e);
+      }
+    }
+
+    fetchStatus();
+    setInterval(fetchStatus, 3000);
+  </script>
+</body>
+</html>

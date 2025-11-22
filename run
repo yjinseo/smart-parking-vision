@@ -1,0 +1,9 @@
+python3 occupancy_video.py --cam /dev/video2 \
+ --weights ./runs/detect/car_mix_aug_colab_ft/weights/best.pt \
+ --rois ./rois/roi_A.yaml ./rois/roi_B.yaml ./rois/roi_C.yaml \
+ --width 1280 --height 720
+ 
+ python3 Flask_app.py
+
+http://172.17.210.111:5000/
+

@@ -1,0 +1,212 @@
+{
+  "A": {
+    "total": 16,
+    "free": 14,
+    "occ": 2,
+    "disabled_total": 0,
+    "disabled_occ": 0,
+    "disabled_free": 0,
+    "slots": [
+      {
+        "id": "A_01",
+        "occupied": true,
+        "disabled": false
+      },
+      {
+        "id": "A_02",
+        "occupied": false,
+        "disabled": false
+      },
+      {
+        "id": "A_03",
+        "occupied": false,
+        "disabled": false
+      },
+      {
+        "id": "A_04",
+        "occupied": false,
+        "disabled": false
+      },
+      {
+        "id": "A_05",
+        "occupied": false,
+        "disabled": false
+      },
+      {
+        "id": "A_06",
+        "occupied": false,
+        "disabled": false
+      },
+      {
+        "id": "A_07",
+        "occupied": false,
+        "disabled": false
+      },
+      {
+        "id": "A_08",
+        "occupied": false,
+        "disabled": false
+      },
+      {
+        "id": "A_09",
+        "occupied": false,
+        "disabled": false
+      },
+      {
+        "id": "A_10",
+        "occupied": false,
+        "disabled": false
+      },
+      {
+        "id": "A_11",
+        "occupied": true,
+        "disabled": false
+      },
+      {
+        "id": "A_12",
+        "occupied": false,
+        "disabled": false
+      },
+      {
+        "id": "A_13",
+        "occupied": false,
+        "disabled": false
+      },
+      {
+        "id": "A_14",
+        "occupied": false,
+        "disabled": false
+      },
+      {
+        "id": "A_15",
+        "occupied": false,
+        "disabled": false
+      },
+      {
+        "id": "A_16",
+        "occupied": false,
+        "disabled": false
+      }
+    ]
+  },
+  "B": {
+    "total": 6,
+    "free": 5,
+    "occ": 1,
+    "disabled_total": 0,
+    "disabled_occ": 0,
+    "disabled_free": 0,
+    "slots": [
+      {
+        "id": "B_01",
+        "occupied": false,
+        "disabled": false
+      },
+      {
+        "id": "B_02",
+        "occupied": false,
+        "disabled": false
+      },
+      {
+        "id": "B_03",
+        "occupied": true,
+        "disabled": false
+      },
+      {
+        "id": "B_04",
+        "occupied": false,
+        "disabled": false
+      },
+      {
+        "id": "B_05",
+        "occupied": false,
+        "disabled": false
+      },
+      {
+        "id": "B_06",
+        "occupied": false,
+        "disabled": false
+      }
+    ]
+  },
+  "C": {
+    "total": 14,
+    "free": 12,
+    "occ": 2,
+    "disabled_total": 2,
+    "disabled_occ": 2,
+    "disabled_free": 0,
+    "slots": [
+      {
+        "id": "C_01",
+        "occupied": false,
+        "disabled": false
+      },
+      {
+        "id": "C_02",
+        "occupied": false,
+        "disabled": false
+      },
+      {
+        "id": "C_03",
+        "occupied": false,
+        "disabled": false
+      },
+      {
+        "id": "C_04",
+        "occupied": false,
+        "disabled": false
+      },
+      {
+        "id": "C_05",
+        "occupied": false,
+        "disabled": false
+      },
+      {
+        "id": "C_06",
+        "occupied": false,
+        "disabled": false
+      },
+      {
+        "id": "C_07",
+        "occupied": false,
+        "disabled": false
+      },
+      {
+        "id": "C_08",
+        "occupied": false,
+        "disabled": false
+      },
+      {
+        "id": "C_09",
+        "occupied": false,
+        "disabled": false
+      },
+      {
+        "id": "C_10",
+        "occupied": false,
+        "disabled": false
+      },
+      {
+        "id": "C_11",
+        "occupied": false,
+        "disabled": false
+      },
+      {
+        "id": "C_12",
+        "occupied": false,
+        "disabled": false
+      },
+      {
+        "id": "C_13",
+        "occupied": true,
+        "disabled": true
+      },
+      {
+        "id": "C_14",
+        "occupied": true,
+        "disabled": true
+      }
+    ]
+  }
+}

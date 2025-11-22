@@ -1,0 +1,189 @@
+body {
+    margin: 0;
+    font-family: Pretendard, Inter, sans-serif;
+    background: #f7f9fc;
+}
+
+/* HEADER */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 40px;
+    background: #fff;
+    border-bottom: 1px solid #e6e6e6;
+}
+
+.title-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.header h1 {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.updated-time {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #555;
+    font-size: 14px;
+}
+
+/* ICONS */
+.icon-lg { width: 28px; }
+.icon-sm { width: 20px; }
+
+/* ZONE GRID */
+.zone-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    padding: 40px;
+}
+
+/* ZONE CARD */
+.zone-card {
+    background: #fff;
+    padding: 28px;
+    border-radius: 14px;
+    box-shadow: 0px 4px 15px rgba(0,0,0,0.06);
+    cursor: pointer;
+    transition: 0.15s ease;
+}
+
+.zone-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0px 6px 18px rgba(0,0,0,0.1);
+}
+
+.zone-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.zone-value {
+    font-size: 34px;
+    font-weight: 700;
+    color: #1A73E8;
+}
+
+.zone-total {
+    font-size: 18px;
+    color: #666;
+}
+
+.zone-subtext {
+    font-size: 14px;
+    margin-left: 6px;
+    color: #777;
+}
+/* ========== ZONE DETAIL PAGE ========== */
+.zone-main {
+    padding: 32px 40px;
+    display: grid;
+    grid-template-columns: minmax(280px, 360px) minmax(320px, 1fr);
+    gap: 40px;
+}
+
+/* 슬롯 섹션 */
+.slot-section h2,
+.predict-section h2 {
+    font-size: 18px;
+    margin-bottom: 16px;
+}
+
+/* 슬롯 그리드 */
+.slot-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(56px, 1fr));
+    gap: 10px;
+    max-width: 320px;
+}
+
+.slot-box {
+    border-radius: 8px;
+    padding: 10px 0;
+    text-align: center;
+    font-weight: 600;
+    font-size: 14px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+}
+
+/* 상태별 색상 */
+.slot-free {
+    background: #E6F7EE;
+    color: #1B8C4D;
+}
+
+.slot-occupied {
+    background: #FFE5E5;
+    color: #C0392B;
+}
+
+.slot-disabled {
+    border: 2px dashed #3F51B5;
+}
+
+/* 범례 */
+.slot-legend {
+    margin-top: 14px;
+    font-size: 13px;
+    color: #666;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.legend-box {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border-radius: 4px;
+    margin-right: 4px;
+    vertical-align: middle;
+}
+
+.legend-box.slot-free {
+    background: #E6F7EE;
+}
+
+.legend-box.slot-occupied {
+    background: #FFE5E5;
+}
+
+.legend-outline {
+    border: 2px dashed #3F51B5;
+    background: transparent;
+}
+
+/* 그래프 영역 */
+.predict-section .chart-wrapper {
+    background: #fff;
+    border-radius: 14px;
+    padding: 20px 24px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.04);
+    height: 260px;  /* 그래프 높이 고정 */
+}
+/* 장애인 슬롯 (Disabled Parking Slot) */
+.disabled-slot {
+    border: 2px dashed #4791ff;
+    background: rgba(71, 145, 255, 0.15);
+    position: relative;
+}
+
+/* 장애인 아이콘 */
+.disabled-icon {
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    right: 4px;
+    bottom: 4px;
+    opacity: 0.9;
+}

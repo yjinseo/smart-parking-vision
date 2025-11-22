@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Zone {{ zone }} - 상세 보기</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        .zone-page { padding: 30px; }
+        .slot-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(55px, 1fr));
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+        .slot-box {
+            padding: 10px 5px;
+            background: #eaf7e9;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+        .slot-box.occupied {
+            background: #ffdddd;
+            color: #b30000;
+        }
+        .slot-box.disabled-slot {
+            border: 2px solid #4c8bff;
+            position: relative;
+        }
+        .slot-box.disabled-slot::after {
+            content: "♿";
+            position: absolute;
+            right: 4px;
+            bottom: 4px;
+            font-size: 14px;
+            color: #4c8bff;
+        }
+
+        .predict-section {
+            margin-top: 25px;
+        }
+
+        .chart-wrapper {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0px 3px 12px rgba(0,0,0,0.08);
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+<header class="header">
+    <div class="title-box">
+        <img src="/static/icons/parking.svg" class="title-icon">
+        <div>
+            <h1>Zone {{ zone }} 현황</h1>
+        </div>
+    </div>
+
+    <a href="/" class="back-btn">
+        <img src="/static/icons/back.svg" class="back-icon"> 뒤로
+    </a>
+</header>
+
+<main class="zone-page">
+
+    <!-- 주차칸 현황 -->
+    <section>
+        <h2>주차칸 현황</h2>
+        <div class="slot-grid">
+            {% for s in slots %}
+            <div class="slot-box
+                {% if s.state == 'occupied' %} occupied {% endif %}
+                {% if s.disabled %} disabled-slot {% endif %}
+            ">
+                {{ s.id }}
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- 예측 그래프 -->
+    <section class="predict-section">
+        <h2>혼잡도 예측 그래프</h2>
+
+        <div class="chart-wrapper">
+            <canvas id="predictChart" height="160"></canvas>
+        </div>
+    </section>
+
+</main>
+
+<script>
+    // Python → JS 변환 데이터
+    const predicted = {{ future_prediction | tojson }};
+    const history   = {{ history_avg | tojson }};
+
+    // 라벨 (시간)
+    const labels = ["현재", "+10분", "+20분", "+30분", "+40분", "+50분", "+60분"];
+
+    const ctx = document.getElementById('predictChart').getContext('2d');
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: "예상 점유 대수",
+                    data: predicted,
+                    borderColor: "#4A90E2",
+                    backgroundColor: "rgba(74, 144, 226, 0.25)",
+                    fill: true,
+                    tension: 0.35,
+                    pointRadius: 3
+                },
+                {
+                    label: "과거 평균 대수",
+                    data: history,
+                    borderColor: "#FFAE63",
+                    backgroundColor: "rgba(255,174,99,0.10)",
+                    fill: true,
+                    tension: 0.35,
+                    pointRadius: 3
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+</script>
+
+</body>
+</html>

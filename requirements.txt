@@ -1,0 +1,15 @@
+# 필수
+numpy<2
+matplotlib>=3.7,<3.9
+opencv-python
+ultralytics
+
+# ROI 저장/불러오기 (YAML)
+pyyaml
+
+# ROI-박스 교차율 계산에 유용
+shapely
+
+# Colab/Notebook 환경에서 필요할 수 있음
+jupyter
+

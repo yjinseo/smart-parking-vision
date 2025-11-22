@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>도심 주차 공간 추천 시스템</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+<header class="header">
+    <div class="title-left">
+        <img src="/static/icons/car.svg" class="icon-lg">
+        <div>
+            <h1>도심 주차 공간 추천 시스템</h1>
+            <div class="subtitle">실시간 주차 현황 모니터링</div>
+        </div>
+    </div>
+
+    <div class="recommend-box">
+        <img src="/static/icons/star.svg" class="icon">
+        <span class="recommend-title">추천 주차장</span>
+        <span class="recommend-zone">{{ recommended_zone }} Zone</span>
+    </div>
+
+    <div class="updated-time">
+        <img src="/static/icons/clock.svg" class="icon-sm">
+        <span id="updatedText">갱신 시간: -</span>
+    </div>
+</header>
+
+
+<main class="zone-container">
+
+    {% for zone, z in zones.items() %}
+    <a href="/zone/{{ zone }}" class="zone-card">
+        <h2>Zone {{ zone }}</h2>
+
+        <p class="free-count">
+            {{ z.free }}
+            <span>/ {{ z.total }}</span>
+        </p>
+
+        {% if z.total_disabled %}
+        <p class="disabled-text">(장애인 {{ z.disabled }}/{{ z.total_disabled }})</p>
+        {% endif %}
+    </a>
+    {% endfor %}
+
+</main>
+
+
+<script>
+// 5초마다 자동 갱신
+setInterval(()=>{ location.reload(); }, 5000);
+</script>
+
+</body>
+</html>

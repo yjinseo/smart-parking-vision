@@ -1,0 +1,10 @@
+.venv/
+*.zip
+*.tar.gz
+__pycache__/
+*.mp4
+*.png
+*.jpg
+runs/
+dataset_car/
+
