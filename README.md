@@ -57,12 +57,13 @@ OpenCV + YOLO + Flask로 Edge 환경에서도 동작
 ![YOLO ROI Demo](result/result.mp4)
 
 실시간 대시보드
-![Dashboard](result/스크린샷%202025-11-23%2004-32-21.png)
-![Dashboard](result/스크린샷%202025-11-23%2004-32-54.png)
-![Dashboard](result/스크린샷%202025-11-23%2004-33-28.png)
+![Dashboard]("result/스크린샷 2025-11-23 04-32-21.png")
+![Dashboard]("result/스크린샷 2025-11-23 04-32-54.png")
+![Dashboard]("result/스크린샷 2025-11-23 04-33-28.png")
 
 
 ## 📂 Folder Structure
+'''bash
 EE_Project/
 │── occupancy_video.py        # YOLO + ROI 실시간 점유 분석
 │── web/
@@ -73,6 +74,7 @@ EE_Project/
 │── refs/                     # ORB reference images
 │── result/                   # demo video & screenshots
 │── dataset_car/              # YOLO training dataset
+'''
 
 ## 🚀 Quick Start
 1) Run Occupancy Detection
