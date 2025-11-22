@@ -1,21 +1,25 @@
-🚙 Smart Parking Vision
+# 🚙 Smart Parking Vision
 
-Real-time Camera-based Parking Space Detection & Zone Recommendation
+### Real-time Camera-based Parking Space Detection & Zone Recommendation
 
-📌 Summary
+![Python](https://img.shields.io/badge/Python-3.10-blue)
+![Flask](https://img.shields.io/badge/Flask-Web%20App-green)
+![YOLO](https://img.shields.io/badge/YOLOv8-Detection-red)
+
+## 📌 Summary
 
 Smart Parking Vision은 CCTV 1대로 주차장 전체 점유 상태를 실시간 분석하고,
 Zone A/B/C 중 가장 비어 있는 구역을 자동 추천하는 AI 시스템입니다.
 YOLO 기반 차량 탐지 + ROI 기반 주차칸 판단을 통해 센서 없이도 정확한 주차 모니터링이 가능합니다.
 
-✨ Features
-🔎 YOLO 기반 차량 탐지 (Custom Trained)
+## ✨ Features
+### 🔎 YOLO 기반 차량 탐지 (Custom Trained)
 
 직접 구축한 데이터셋(수동 + 자동 라벨링)으로 모델 파인튜닝
 
 다양한 조도/혼잡도 조건에서도 안정적 인식
 
-🧩 ROI 기반 주차칸 점유 판단
+### 🧩 ROI 기반 주차칸 점유 판단
 
 각 주차칸을 Polygon ROI로 설정
 
@@ -23,7 +27,7 @@ YOLO 기반 차량 탐지 + ROI 기반 주차칸 판단을 통해 센서 없이�
 
 장애인 구역 별도 처리
 
-🖥 Web Dashboard (Flask)
+### 🖥 Web Dashboard (Flask)
 
 Zone A/B/C 실시간 Free/Total 표시
 
@@ -33,7 +37,7 @@ Zone 클릭 시 상세 주차칸 상태 + 점유 예측 그래프(Chart.js)
 
 5초 자동 새로고침으로 실시간 데이터 반영
 
-🧠 Zone 추천 알고리즘
+### 🧠 Zone 추천 알고리즘
 
 단순 빈자리 수 비교를 넘어
 
@@ -41,18 +45,16 @@ Zone 클릭 시 상세 주차칸 상태 + 점유 예측 그래프(Chart.js)
 
 가장 추천되는 Zone 메인 화면에 표시
 
-🟦 Jetson Nano 구동 가능
+### 🟦 Jetson Nano 구동 가능
 
 OpenCV + YOLO + Flask로 Edge 환경에서도 동작
 
 추가 센서 없이 저비용·고확장성
 
-📸 Demo
+## 📸 Demo
 차량 인식 결과
 
-(GitHub 업로드 후 이미지 경로만 바꾸면 됩니다.)
-
-![YOLO ROI Demo](result/out_vis.jpg)
+![YOLO ROI Demo](result/result.mp4)
 
 실시간 대시보드
 ![Dashboard](result/스크린샷 2025-11-23 04-32-21.png)
@@ -60,7 +62,7 @@ OpenCV + YOLO + Flask로 Edge 환경에서도 동작
 ![Dashboard](result/스크린샷 2025-11-23 04-33-28.png)
 
 
-📂 Folder Structure
+## 📂 Folder Structure
 EE_Project/
 │── occupancy_video.py        # YOLO + ROI 실시간 점유 분석
 │── web/
@@ -72,7 +74,7 @@ EE_Project/
 │── result/                   # demo video & screenshots
 │── dataset_car/              # YOLO training dataset
 
-🚀 Quick Start
+## 🚀 Quick Start
 1) Run Occupancy Detection
 python3 occupancy_video.py \
   --cam /dev/video2 \
@@ -89,7 +91,7 @@ python3 Flask_app.py
 
 http://<Your-IP>:5000
 
-🧠 Tech Stack
+## 🧠 Tech Stack
 
 YOLOv8
 
